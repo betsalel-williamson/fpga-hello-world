@@ -1,9 +1,10 @@
 # Ignore common development and build artifacts
 .git
+.gemini
+.work-items
+.github
 .gitignore
 .gitmodules
-.vscode/
-.idea/
 
 # Ignore Docker-specific files
 Dockerfile
@@ -18,3 +19,43 @@ Dockerfile
 
 # Ignore environment files
 .env
+
+# Version control
+.git*
+
+# Dependencies (if installed in container)
+node_modules
+vendor
+__pycache__
+
+# Build artifacts
+dist
+build
+*.o
+*.so
+
+# Development files
+.env.*
+*.log
+coverage
+.nyc_output
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md
+docs/
+
+# Test files
+test/
+tests/
+spec/
+__tests__/
