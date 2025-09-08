@@ -4,13 +4,32 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install necessary tools
 RUN apt-get update && apt-get install -y \
-    iverilog \
-    gtkwave \
-    git \
-    awscli \
     make \
+    iverilog \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# TASK automated awscli
+# RUN apt-get update && apt-get install -y \
+#     awscli \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
+
+# WIP rendering vcd files to png -- not the focus of the tasks right now
+# RUN apt-get update && apt-get install -y \
+#     gtkwave \
+#     xvfb \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
+
+# RUN apt-get update && apt-get install -y \
+#     python3 \
+#     python3-pip \   
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*    
+
+# # Install Python libraries for VCD parsing and plotting
+# RUN pip3 install vcdvcd matplotlib
 
 # Create a non-root user and group with a common UID/GID for GitHub Actions runners
 # GitHub Actions runner often uses UID 1001.
