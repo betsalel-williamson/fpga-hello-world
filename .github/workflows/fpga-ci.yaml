@@ -7,29 +7,8 @@ permissions:
   packages: write # Grant write permissions for publishing packages
 
 jobs:
-  check-paths:
-    runs-on: ubuntu-latest
-    outputs:
-      docker_changed: ${{ steps.docker_changes.outputs.changed_files }}
-      verilog_changed: ${{ steps.verilog_changes.outputs.changed_files }}
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - id: docker_changes
-      uses: tj-actions/changed-files@v40
-      with:
-        files: docker/fpga-dev-env/**
-
-    - id: verilog_changes
-      uses: tj-actions/changed-files@v40
-      with:
-        files: src/verilog/hello_world/**
-
   build-and-publish-docker-image:
     runs-on: ubuntu-latest
-    needs: check-paths
-    if: needs.check-paths.outputs.docker_changed != ''
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -48,6 +27,7 @@ jobs:
       run: docker push ghcr.io/${{ github.repository }}/${{ vars.IMAGE_NAME }}:latest
 
   build-and-simulate:
+    needs: build-and-publish-docker-image
     runs-on: ubuntu-latest
     container: ghcr.io/${{ github.repository }}/${{ vars.IMAGE_NAME }}:latest
 
