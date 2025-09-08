@@ -12,17 +12,16 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Create a non-root user and group
-# Using -S for system user/group to avoid creating home directories by default
-# and to ensure a consistent UID/GID if not explicitly set by ARG.
-# For a dev environment, a home directory is useful, so -m is kept for useradd.
-RUN groupadd --system fpgauser && \
-    useradd --system --create-home --gid fpgauser fpgauser
+# Create a non-root user and group with a common UID/GID for GitHub Actions runners
+# GitHub Actions runner often uses UID 1001.
+RUN groupadd --system --gid 1001 fpgauser && \
+    useradd --system --create-home --uid 1001 --gid 1001 fpgauser
 
 # Set the working directory
 WORKDIR /app
 
 # Ensure the non-root user owns the working directory
+# This is important if /app is a mounted volume from the host
 RUN chown -R fpgauser:fpgauser /app
 
 # Switch to the non-root user

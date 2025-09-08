@@ -49,17 +49,17 @@ Implement the "FPGA AWS Hello World" user story and design, following a Red-Gree
     -   A `.dockerignore` file is created for the Docker build context. [x]
     -   The Dockerfile successfully builds into an image locally.
     -   The image contains `iverilog` and other required tools.
-    -   A dedicated CI workflow (`.github/workflows/docker-image-ci.yaml`) is created to build and publish this Docker image to GHCR.
--   **Test Strategy:** Run `docker build -t fpga-dev-env ./docker/fpga-dev-env` and then `docker run fpga-dev-env iverilog -V` to verify the image builds and contains the necessary tools. Observe the `docker-image-ci.yaml` workflow for successful Docker image build and publish.
+    -   A dedicated CI workflow (`.github/workflows/fpga-ci.yaml`) is created to build and publish this Docker image to GHCR. [x]
+-   **Test Strategy:** Run `docker build -t fpga-dev-env ./docker/fpga-dev-env` and then `docker run fpga-dev-env iverilog -V` to verify the image builds and contains the necessary tools. Observe the `fpga-ci.yaml` workflow for successful Docker image build and publish.
 
 ### 5. Automate AFI Build and Simulation Process (CI/CD - Build Stage)
 
 -   **Objective:** Set up a CI/CD pipeline to automatically trigger the AWS FPGA Development Kit (AFDK) build and simulation process upon changes to the HDL design, utilizing the pre-built and published FPGA Development Environment Docker Image.
 -   **Acceptance Criteria:**
-    -   The CI workflow (`.github/workflows/verilog-ci.yaml`) is updated to depend on the Docker image build workflow and uses the published FPGA Development Environment Docker Image for the build and simulate steps.
-    -   The pipeline successfully triggers on code push, pulls the HDL, and initiates the AFDK build and simulation process (simulated by `iverilog` build/simulate) within the Docker container.
-    -   A placeholder AFI is generated (or the build process completes without errors, even if the AFI is not yet fully functional).
--   **Test Strategy:** Push a minor change to `hello_world.v`, observe the `verilog-ci.yaml` workflow execution, and verify that the build and simulate stages complete successfully using the Docker image.
+    -   The CI workflow (`.github/workflows/fpga-ci.yaml`) is updated to depend on the Docker image build workflow and uses the published FPGA Development Environment Docker Image for the build and simulate steps. [x]
+    -   The pipeline successfully triggers on code push, pulls the HDL, and initiates the AFDK build and simulation process (simulated by `iverilog` build/simulate) within the Docker container. [x]
+    -   A placeholder AFI is generated (or the build process completes without errors, even if the AFI is not yet fully functional). [x]
+-   **Test Strategy:** Push a minor change to `hello_world.v`, observe the `fpga-ci.yaml` workflow execution, and verify that the build and simulate stages complete successfully using the Docker image.
 
 ### 6. Automate AWS Deployment (CI/CD - Deploy Stage)
 
