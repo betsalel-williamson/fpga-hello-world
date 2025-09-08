@@ -6,7 +6,7 @@ inclusion: manual
 
 ## Objective
 
-Implement the "FPGA AWS Hello World" user story and design, following a Red-Green-Refactor approach for each step to establish a baseline for FPGA development on AWS, including measurement of monetary cost, development time, deployment time, execution time, power consumption, and Mean Time To Restore (MTTR).
+Implement the "FPGA AWS Hello World" user story and design, following a Red-Green-Refactor approach for each step to establish a baseline for FPGA development on AWS, including measurement of monetary cost, development time, deployment time, execution time, power consumption, and Mean Time To Restore (MTTR). **Deployment to AWS will be a manually triggered step within the CI interface in the initial phases to minimize costs.**
 
 ## Requirements Traceability
 
@@ -63,14 +63,15 @@ Implement the "FPGA AWS Hello World" user story and design, following a Red-Gree
     -   The `hello_world.vvp` and `hello_world.vcd` files are uploaded as workflow artifacts. [x]
 -   **Test Strategy:** Push a minor change to `hello_world.v`, observe the `fpga-ci.yaml` workflow execution, and verify that the `make test` command completes successfully using the Docker image, and that the simulation artifacts are available for download.
 
-### 6. Automate AWS Deployment (CI/CD - Deploy Stage)
+### 6. Manually Triggered AWS Deployment (Cost-Controlled)
 
--   **Objective:** Extend the CI/CD pipeline to deploy the generated AFI to the provisioned EC2 F1 instance and update the AWS infrastructure as defined by the IaC.
+-   **Objective:** Manually trigger the deployment of the generated AFI to the provisioned EC2 F1 instance and update the AWS infrastructure as defined by the IaC via the CI interface, ensuring this is done only when confident in the build to minimize costs.
 -   **Acceptance Criteria:**
-    -   The CI/CD workflow is updated to include a deployment stage.
-    -   The pipeline successfully deploys the AFI to an F1 instance.
+    -   The CI/CD pipeline includes a stage for AWS deployment that can be manually triggered.
+    -   The generated AFI is successfully deployed to an F1 instance upon manual trigger.
     -   The F1 instance is running with the custom AFI loaded.
--   **Test Strategy:** Trigger the CI/CD pipeline, verify the F1 instance status and AFI association in the AWS console, and confirm the IaC stack update.
+    -   The AWS infrastructure is updated via IaC upon manual trigger when necessary.
+-   **Test Strategy:** Manually trigger the deployment stage in the CI interface, then verify the F1 instance status and AFI association in the AWS console, and confirm the IaC stack update.
 
 ### 7. Develop Basic Host Application
 
@@ -88,7 +89,7 @@ Implement the "FPGA AWS Hello World" user story and design, following a Red-Gree
     -   Scripts or AWS monitoring configurations are in place to collect the specified metrics.
     -   Metrics are logged (e.g., to AWS CloudWatch, S3, or a local file).
     -   The collected data is accessible and interpretable.
--   **Test Strategy:** Run a full deployment and execution cycle via the CI/CD pipeline, then verify the presence and content of the collected metrics in the designated storage location.
+-   **Test Strategy:** Run a full deployment and execution cycle (including the manually triggered deployment step), then verify the presence and content of the collected metrics in the designated storage location.
 
 ### 9. Implement Mean Time To Restore (MTTR) Measurement
 
