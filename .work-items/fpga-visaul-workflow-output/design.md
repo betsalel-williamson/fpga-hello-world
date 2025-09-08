@@ -12,7 +12,7 @@ To establish a robust, automated system for generating and examining visual outp
 
 **3.1. Core Rendering Mechanism**
 
-Instead of relying solely on GTKWave's TCL scripting, which can be finicky in headless environments, we will prioritize a Python-based rendering approach using `vcdvcd` and `matplotlib`. This offers greater control, easier debugging, and better integration with Python-based analysis tools.
+Instead of relying solely on GTKWave's TCL scripting, which can be finicky in headless environments, we will prioritize a Python-based rendering approach using `vcdvcd` and `matplotlib`. This offers greater control, easier debugging, and better integration with Python-based analysis tools. **Consideration will also be given to `fliplot` (https://github.com/raczben/fliplot) as an alternative, especially if it offers more streamlined headless rendering or advanced waveform visualization features.**
 
 *   **Primary Tool:** `render_waveform.py` (or an enhanced version of it) will be the primary tool for VCD to image conversion.
 *   **Headless Configuration:** `matplotlib.use('Agg')` will be explicitly set at the beginning of the Python script to ensure headless rendering without X server dependencies.
@@ -24,7 +24,7 @@ Instead of relying solely on GTKWave's TCL scripting, which can be finicky in he
     *   Verify the existence of the VCD file.
     *   Invoke the Python rendering script with the correct input and output paths.
     *   Handle any necessary environment variables (e.g., `PYTHONPATH`).
-*   **Docker Integration:** The Dockerfile will ensure all necessary Python libraries (`vcdvcd`, `matplotlib`) and system dependencies are installed. The entrypoint or command will execute `generate_visual_output.sh`.
+*   **Docker Integration:** The Dockerfile will ensure all necessary Python libraries (`vcdvcd`, `matplotlib`, and potentially `fliplot`) and system dependencies are installed. The entrypoint or command will execute `generate_visual_output.sh`.
 
 **3.3. Issue Highlighting and Analysis**
 
@@ -57,6 +57,7 @@ No new external API contracts are introduced with this feature. Internal interfa
 #### 5. Alternatives Considered
 *   **Pure GTKWave TCL Scripting:** While powerful, its reliance on Xvfb and specific GTKWave versions makes it less portable and harder to debug in a fully headless, automated environment compared to a Python-based approach. The `--auto-display` issue highlights this fragility.
 *   **Other VCD Viewers:** Many VCD viewers exist, but `vcdvcd` + `matplotlib` offers a programmatic, scriptable, and widely supported solution for headless rendering and custom analysis.
+*   **Fliplot (https://github.com/raczben/fliplot):** A Python library specifically designed for plotting digital waveforms. It could offer a more specialized and potentially optimized solution for waveform visualization compared to general-purpose `matplotlib`. Its suitability for headless environments and ease of integration with existing analysis logic would need to be evaluated.
 
 #### 6. Out of Scope
 *   Complex timing analysis requiring dedicated EDA tools.
