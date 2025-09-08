@@ -50,6 +50,10 @@ Due to compatibility issues with GTKWave on macOS 14 (Sonoma) and later, a commu
     gtkwave --version
     ```
 
+### Viewing Simulation Output Online
+
+For quick online viewing of VCD files, you can use [Fliplot](https://raczben.github.io/fliplot/). Simply drag and drop your `.vcd` file onto the website.
+
 ## 4. GitHub Actions Linting (actionlint)
 
 `actionlint` is a linter for GitHub Actions workflow files. It helps catch common errors and ensures your workflows adhere to best practices.
