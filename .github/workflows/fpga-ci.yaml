@@ -41,6 +41,9 @@ jobs:
     - name: Test Verilog design
       run: make -C src/verilog/hello_world test
 
+    - name: List files in simulation directory
+      run: ls -l src/verilog/hello_world
+
     - name: Upload simulation artifacts
       uses: actions/upload-artifact@v4
       with:
