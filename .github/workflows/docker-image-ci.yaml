@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+  packages: write # Grant write permissions for publishing packages
+
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
