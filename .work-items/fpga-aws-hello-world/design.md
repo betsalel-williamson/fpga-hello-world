@@ -12,11 +12,14 @@ To define the technical approach for deploying and executing a basic "Hello Worl
 
 The "Hello World" example will involve a simple FPGA design (e.g., blinking an LED or a basic counter) implemented using a hardware description language (HDL) like Verilog or VHDL. This design will be synthesized, placed, and routed to generate a custom Amazon FPGA Image (AFI). The AFI and the necessary AWS infrastructure will be defined as code and managed through a GitOps workflow. This will ensure that all deployments to an AWS EC2 F1 instance are automated and version-controlled. A host application (e.g., C/C++ or Python) running on the EC2 instance will interact with the FPGA to demonstrate the "Hello World" functionality.
 
+To streamline the CI/CD process and ensure a consistent development environment, a specialized Docker image will be created. This image will pre-install all necessary FPGA development tools (e.g., Icarus Verilog, AWS FPGA Development Kit) and dependencies, eliminating the need for on-the-fly installations within the CI/CD pipeline.
+
 The process will involve:
 -   **HDL Design:** A minimal "Hello World" equivalent (e.g., a simple register that can be written to and read from, or a counter).
--   **AWS FPGA Development Kit (AFDK):** Utilizing the AFDK for synthesis, place, and route to generate the AFI.
+-   **FPGA Development Environment Image:** A pre-built Docker image containing all required FPGA development tools.
+-   **AWS FPGA Development Kit (AFDK):** Utilizing the AFDK for synthesis, place, and route to generate the AFI, executed within the specialized Docker image.
 -   **Infrastructure as Code (IaC):** Defining AWS resources (e.g., EC2 F1 instance, S3 buckets for AFI storage) using tools like AWS CloudFormation or Terraform, managed in a Git repository.
--   **CI/CD Pipeline:** An automated pipeline (e.g., AWS CodePipeline, GitHub Actions) triggered by Git commits to build the AFI, provision/update the AWS infrastructure, and deploy the host application.
+-   **CI/CD Pipeline:** An automated pipeline (e.g., AWS CodePipeline, GitHub Actions) triggered by Git commits to build the AFI (using the specialized Docker image), provision/update the AWS infrastructure, and deploy the host application.
 -   **AWS EC2 F1 Instance:** The target platform for deploying the AFI and running the host application, provisioned and managed via IaC.
 -   **Host Application:** A simple program to load the AFI, interact with the FPGA, and verify functionality, deployed via the CI/CD pipeline.
 -   **Monitoring:** Implementing mechanisms to capture cost, time, and power consumption data, integrated into the automated workflow.
@@ -34,9 +37,10 @@ N/A for this initial "Hello World" example.
 ### 3.3. Component Responsibilities
 
 -   **FPGA Design (HDL):** Implements the core "Hello World" logic.
--   **AFDK Toolchain:** Compiles the HDL into an AFI.
+-   **FPGA Development Environment Image:** Provides a consistent and pre-configured environment for FPGA tool execution.
+-   **AFDK Toolchain:** Compiles the HDL into an AFI, executed within the Docker image.
 -   **IaC Definitions:** Defines and manages the AWS infrastructure required for deployment.
--   **CI/CD Pipeline:** Automates the build, deployment, and update processes based on Git commits.
+-   **CI/CD Pipeline:** Automates the build, deployment, and update processes based on Git commits, utilizing the FPGA Development Environment Image for build steps.
 -   **AWS EC2 F1 Instance:** Provides the hardware platform for the FPGA and runs the host application, managed by IaC.
 -   **Host Application:** Manages AFI loading, communicates with the FPGA, and reports results, deployed via CI/CD.
 -   **Monitoring Scripts/Tools:** Collects and logs metrics related to cost, time, and power, integrated into the automated workflow.
@@ -45,6 +49,7 @@ N/A for this initial "Hello World" example.
 
 -   **Manual AWS Resource Provisioning:** Rejected in favor of GitOps to ensure repeatability, version control, and to avoid manual errors in deployment and configuration.
 -   **Local FPGA Development Board:** Considered for initial learning, but AWS F1 instances were chosen to specifically address the cloud deployment aspect and cost/time/power considerations in a cloud environment.
+-   **On-the-fly Tool Installation in CI/CD:** Rejected in favor of a pre-built Docker image to reduce CI/CD pipeline execution time, improve build consistency, and simplify workflow definitions.
 -   **Different HDLs/Frameworks:** While other HDLs (VHDL) or high-level synthesis (HLS) frameworks exist, Verilog will be used for simplicity and broad compatibility for the initial "Hello World".
 
 ## 5. Out of Scope
