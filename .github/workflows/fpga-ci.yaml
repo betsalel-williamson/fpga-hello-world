@@ -6,9 +6,6 @@ permissions:
   contents: read
   packages: write # Grant write permissions for publishing packages
 
-env:
-  IMAGE_NAME: fpga-dev-env
-
 jobs:
   build-and-publish-docker-image:
     runs-on: ubuntu-latest
@@ -24,10 +21,10 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build Docker image
-      run: docker build -t ghcr.io/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest ./docker/fpga-dev-env
+      run: docker build -t ghcr.io/${{ github.repository }}/${{ vars.IMAGE_NAME }}:latest ./docker/fpga-dev-env
 
     - name: Push Docker image
-      run: docker push ghcr.io/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest
+      run: docker push ghcr.io/${{ github.repository }}/${{ vars.IMAGE_NAME }}:latest
 
   build-and-simulate:
     needs: build-and-publish-docker-image
