@@ -28,22 +28,26 @@ Git is a distributed version control system used for tracking changes in source 
     git --version
     ```
 
-## 3. Verilog Development Tools (Icarus Verilog)
+## 3. Verilog Development Tools (Icarus Verilog & GTKWave)
 
-Icarus Verilog is a Verilog compiler that generates an intermediate format (VVVP) which can be executed by a simulator (vvp).
+Icarus Verilog is a Verilog compiler that generates an intermediate format (VVVP) which can be executed by a simulator (vvp). GTKWave is a waveform viewer used to visualize the output of Verilog simulations.
 
 ### Mac Installation
 
-Use Homebrew to install Icarus Verilog:
+Due to compatibility issues with GTKWave on macOS 14 (Sonoma) and later, a community Homebrew tap is recommended for installation.
 
-```bash
-brew install icarus-verilog
-```
+4.  **Install Icarus Verilog and GTKWave from a community tap**:
+    ```bash
+    brew install icarus-verilog
+    brew tap randomplum/gtkwave
+    brew install --HEAD randomplum/gtkwave/gtkwave
+    ```
 
 -   **Verification:** After installation, verify by running:
 
     ```bash
     iverilog -V
+    gtkwave --version
     ```
 
 ## 4. GitHub Actions Linting (actionlint)

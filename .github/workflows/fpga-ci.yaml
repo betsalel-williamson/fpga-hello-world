@@ -6,6 +6,9 @@ permissions:
   contents: read
   packages: write # Grant write permissions for publishing packages
 
+env:
+  IMAGE_NAME: fpga-dev-env
+
 jobs:
   build-and-publish-docker-image:
     runs-on: ubuntu-latest
@@ -21,10 +24,10 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build Docker image
-      run: docker build -t ghcr.io/${{ github.repository }}/${{ vars.IMAGE_NAME }}:latest ./docker/fpga-dev-env
+      run: docker build -t ghcr.io/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest ./docker/fpga-dev-env
 
     - name: Push Docker image
-      run: docker push ghcr.io/${{ github.repository }}/${{ vars.IMAGE_NAME }}:latest
+      run: docker push ghcr.io/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest
 
   build-and-simulate:
     needs: build-and-publish-docker-image
@@ -35,13 +38,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Build Verilog design
-      run: make -C src/verilog/hello_world build
+    - name: Test Verilog design
+      run: make -C src/verilog/hello_world test
 
-    - name: Simulate Verilog design
-      run: make -C src/verilog/hello_world simulate
-
-    - name: Verify simulation output
-      run: |
-        ls -l src/verilog/hello_world/hello_world.vvp
-        ls -l src/verilog/hello_world/hello_world.vcd
+    - name: Upload simulation artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: verilog-simulation-artifacts
+        path: src/verilog/hello_world/*.{vvp,vcd}

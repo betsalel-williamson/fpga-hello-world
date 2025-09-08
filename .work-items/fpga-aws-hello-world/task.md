@@ -28,10 +28,11 @@ Implement the "FPGA AWS Hello World" user story and design, following a Red-Gree
 
 -   **Objective:** Develop a simple, synthesizable Verilog module that represents a basic "Hello World" equivalent (e.g., a register that can be written to and read from, or a simple counter).
 -   **Acceptance Criteria:**
-    -   A Verilog file (`hello_world.v`) is created with a basic, synthesizable design.
-    -   A `Makefile` is created to automate build and simulation. [x]
+    -   A Verilog file (`hello_world.v`) is created with a basic, synthesizable design. [x]
+    -   A `Makefile` is created to automate build, simulate, and verify. [x]
+    -   A `verify_simulation.sh` script is created to verify simulation output. [x]
     -   The design passes Verilog linting/syntax checks. [x]
--   **Test Strategy:** Run `make -C src/verilog/hello_world build` to ensure no syntax errors and basic compilability.
+-   **Test Strategy:** Run `make -C src/verilog/hello_world test` to ensure no syntax errors, successful compilation, simulation, and verification of output. [x]
 
 ### 3. Define AWS Infrastructure as Code (IaC)
 
@@ -59,7 +60,8 @@ Implement the "FPGA AWS Hello World" user story and design, following a Red-Gree
     -   The CI workflow (`.github/workflows/fpga-ci.yaml`) is updated to depend on the Docker image build workflow and uses the published FPGA Development Environment Docker Image for the build and simulate steps. [x]
     -   The pipeline successfully triggers on code push, pulls the HDL, and initiates the AFDK build and simulation process (simulated by `iverilog` build/simulate) within the Docker container. [x]
     -   A placeholder AFI is generated (or the build process completes without errors, even if the AFI is not yet fully functional). [x]
--   **Test Strategy:** Push a minor change to `hello_world.v`, observe the `fpga-ci.yaml` workflow execution, and verify that the build and simulate stages complete successfully using the Docker image.
+    -   The `hello_world.vvp` and `hello_world.vcd` files are uploaded as workflow artifacts. [x]
+-   **Test Strategy:** Push a minor change to `hello_world.v`, observe the `fpga-ci.yaml` workflow execution, and verify that the `make test` command completes successfully using the Docker image, and that the simulation artifacts are available for download.
 
 ### 6. Automate AWS Deployment (CI/CD - Deploy Stage)
 
