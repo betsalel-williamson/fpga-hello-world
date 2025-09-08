@@ -1,0 +1,20 @@
+# Ignore common development and build artifacts
+.git
+.gitignore
+.gitmodules
+.vscode/
+.idea/
+
+# Ignore Docker-specific files
+Dockerfile
+
+# Ignore build artifacts from Verilog
+*.vvp
+*.vcd
+
+# Ignore temporary files and logs
+*.log
+*.tmp
+
+# Ignore environment files
+.env

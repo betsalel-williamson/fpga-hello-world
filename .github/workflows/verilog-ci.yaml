@@ -1,0 +1,27 @@
+name: Verilog CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-simulate:
+    runs-on: ubuntu-latest
+    container: ghcr.io/${{ github.repository }}/${{ vars.IMAGE_NAME }}:latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Build Verilog design
+      run: make -C src/verilog/hello_world build
+
+    - name: Simulate Verilog design
+      run: make -C src/verilog/hello_world simulate
+
+    - name: Verify simulation output
+      run: |
+        ls -l src/verilog/hello_world/hello_world.vvp
+        ls -l src/verilog/hello_world/hello_world.vcd
