@@ -90,6 +90,7 @@ jobs:
 
       - name: Test VHDL design
         run: |
+          ghdl --version
           make -C src/vhdl/hello_world test
           test -f src/vhdl/hello_world/hello_world || { echo "Error: hello_world executable not found!"; exit 1; }
           ls -l src/vhdl/hello_world
