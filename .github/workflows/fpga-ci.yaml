@@ -22,7 +22,7 @@ env:
   # Removed IMAGE_NAME from env as per user's request it's a vars variable
   # Define the fixed path to your Dockerfile context relative to the repository root
   DOCKERFILE_CONTEXT_PATH: ./docker/fpga-dev-env # This assumes your Dockerfile is in a directory literally named 'fpga-dev-env'
-  # Define the path to your Dockerfile within the context
+  DOCKERFILE_VHDL_CONTEXT_PATH: ./docker/vhdl-dev-env
   DOCKERFILE_PATH: Dockerfile # Assuming Dockerfile is directly in ./docker/fpga-dev-env
 
 jobs:
@@ -132,3 +132,90 @@ jobs:
           name: systemverilog-simulation-artifacts
           path: |
             src/systemverilog/hello_world/obj_dir/
+
+  build-and-publish-vhdl-dev-image:
+    runs-on: ubuntu-latest
+    outputs:
+      image_rebuilt: ${{ steps.check_for_rebuild.outputs.should_rebuild }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step to check if Docker related files have changed
+      - name: Check for Dockerfile or related changes
+        id: check_docker_files
+        uses: tj-actions/changed-files@v40
+        with:
+          files: |
+            ${{ env.DOCKERFILE_VHDL_CONTEXT_PATH }}/**
+            .github/workflows/fpga_ci.yml
+          separator: ','
+
+      - name: Determine if Docker image should be rebuilt
+        id: check_for_rebuild
+        run: |
+          SHOULD_REBUILD="false"
+          if [[ "${{ github.event.inputs.force_rebuild }}" == "true" ]]; then
+            echo "Force rebuild is enabled."
+            SHOULD_REBUILD="true"
+          elif [[ "${{ steps.check_docker_files.outputs.any_changed }}" == "true" ]]; then
+            echo "Docker-related files have changed."
+            SHOULD_REBUILD="true"
+          else
+            echo "No Docker-related changes and no force rebuild. Skipping image build."
+          fi
+          echo "should_rebuild=$SHOULD_REBUILD" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        if: steps.check_for_rebuild.outputs.should_rebuild == 'true'
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        if: steps.check_for_rebuild.outputs.should_rebuild == 'true'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Calculate image tags
+        id: meta
+        if: steps.check_for_rebuild.outputs.should_rebuild == 'true'
+        uses: docker/metadata-action@v5
+        with:
+          # Use vars.VHDL_IMAGE_NAME for the image name from GitHub settings
+          images: ghcr.io/${{ github.repository }}/${{ vars.VHDL_IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+            type=sha,format=long
+
+      - name: Build and push Docker image
+        if: steps.check_for_rebuild.outputs.should_rebuild == 'true'
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ env.DOCKERFILE_VHDL_CONTEXT_PATH }}
+          file: ${{ env.DOCKERFILE_VHDL_CONTEXT_PATH }}/${{ env.DOCKERFILE_PATH }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          # Conditional caching logic remains the same
+          cache-from: ${{ github.event.inputs.force_rebuild == 'true' && '' || format('type=gha,scope={0}-build-cache', vars.VHDL_IMAGE_NAME) }}
+          cache-to: type=gha,mode=max,scope=${{ vars.VHDL_IMAGE_NAME }}-build-cache
+
+  vhdl-hello-world:
+    needs: build-and-publish-vhdl-dev-image
+    runs-on: ubuntu-latest
+    container: ghcr.io/${{ github.repository }}/${{ vars.VHDL_IMAGE_NAME }}:latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Test SystemVerilog design
+        run: make -C src/vhdl/hello_world test
+
+      - name: Upload SystemVerilog simulation artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: systemverilog-simulation-artifacts
+          path: |
+            src/vhdl/hello_world/hello_world

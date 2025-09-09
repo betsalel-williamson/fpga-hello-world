@@ -1,0 +1,10 @@
+# Ignore GHDL generated files
+*.o
+*.cf
+hello_world
+*.fst
+*.ghw
+
+# Ignore simulation output files
+*.vcd
+work/
