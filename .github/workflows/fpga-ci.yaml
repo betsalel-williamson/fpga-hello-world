@@ -24,7 +24,7 @@ jobs:
     with:
       dockerfile_context_path: ./docker/verilog-dev-env
       image_name_var: verilog-dev-image
-      force_rebuild: ${{ github.event.inputs.force_rebuild }}
+      force_rebuild: ${{ github.event.inputs.force_rebuild || false }}
 
   verilog-hello-world:
     needs: build-and-publish-verilog-dev-image
@@ -51,7 +51,7 @@ jobs:
     with:
       dockerfile_context_path: ./docker/systemverilog-dev-env
       image_name_var: systemverilog-dev-image
-      force_rebuild: ${{ github.event.inputs.force_rebuild }}
+      force_rebuild: ${{ github.event.inputs.force_rebuild || false }}
 
   systemverilog-hello-world:
     needs: build-and-publish-systemverilog-dev-image
@@ -77,7 +77,7 @@ jobs:
     with:
       dockerfile_context_path: ./docker/vhdl-dev-env
       image_name_var: vhdl-dev-image
-      force_rebuild: ${{ github.event.inputs.force_rebuild }}
+      force_rebuild: ${{ github.event.inputs.force_rebuild || false }}
 
   vhdl-hello-world:
     needs: build-and-publish-vhdl-dev-image
