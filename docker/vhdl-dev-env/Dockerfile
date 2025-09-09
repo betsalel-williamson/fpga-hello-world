@@ -4,6 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install necessary tools verilog
 RUN apt-get update && apt-get install -y \
+    build-essential \
     ghdl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
