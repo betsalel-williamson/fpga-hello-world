@@ -91,7 +91,7 @@ jobs:
       - name: Test SystemVerilog design
         run: |
           make -C src/vhdl/hello_world test
-          ls -F
+          ls src/vhdl/hello_world -F
 
       - name: Upload SystemVerilog simulation artifacts
         uses: actions/upload-artifact@v4
