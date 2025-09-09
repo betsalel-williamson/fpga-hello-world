@@ -58,7 +58,7 @@ Colima provides a container runtime for macOS (and Linux) with minimal overhead,
 
 Icarus Verilog is a Verilog compiler that generates an intermediate format (VVVP) which can be executed by a simulator (vvp). Verilator is a fast, open-source Verilog and SystemVerilog simulator. GHDL is an open-source VHDL compiler and simulator. GTKWave is a waveform viewer used to visualize the output of Verilog/SystemVerilog/VHDL simulations.
 
-### Mac Installation
+### HDL Tools Mac Installation
 
 Due to compatibility issues with GTKWave on macOS 14 (Sonoma) and later, a community Homebrew tap is recommended for installation.
 
@@ -99,7 +99,7 @@ For quick online viewing of VCD files, you can use [Fliplot](https://raczben.git
 
 `actionlint` is a linter for GitHub Actions workflow files. It helps catch common errors and ensures your workflows adhere to best practices.
 
-### Mac Installation
+### Actionlint Mac Installation
 
 Use Homebrew to install `actionlint`:
 
