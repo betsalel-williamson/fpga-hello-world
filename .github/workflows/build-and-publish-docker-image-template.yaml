@@ -47,6 +47,7 @@ jobs:
             SHOULD_REBUILD="true"
           elif [[ "${{ steps.check_docker_files.outputs.any_changed }}" == "true" ]]; then
             echo "Docker-related files have changed."
+            echo "List all the files that have changed: ${{ steps.check_docker_files.outputs.all_changed_files }}"
             SHOULD_REBUILD="true"
           else
             echo "No Docker-related changes and no force rebuild. Skipping image build."
