@@ -1,8 +1,8 @@
 VHDL_SOURCES = hello_world.vhdl
 TOP_ENTITY = hello_world
-SIM_OUT = $(TOP_ENTITY).ghw
+SIM_OUT = $(TOP_ENTITY).out
 
-all: compile
+all: test
 
 build:
 	ghdl -a $(VHDL_SOURCES)
@@ -17,6 +17,6 @@ verify:
 test: build verify
 
 clean:
-	rm -f *.o *.cf $(SIM_OUT) $(TOP_ENTITY)
+	rm -f *.o *.cf $(SIM_OUT) $(TOP_ENTITY) *.fst
 
 .PHONY: all compile simulate clean
