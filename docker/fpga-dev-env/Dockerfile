@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
 
 # Install necessary tools systemverilog
 RUN apt-get update && apt-get install -y \
+    perl \
     verilator \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
