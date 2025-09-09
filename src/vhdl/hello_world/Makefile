@@ -13,8 +13,8 @@ simulate:
 
 verify:
 	./verify_simulation.sh
-	
-test: build simulate verify
+
+test: build verify
 
 clean:
 	rm -f *.o *.cf $(SIM_OUT) $(TOP_ENTITY)

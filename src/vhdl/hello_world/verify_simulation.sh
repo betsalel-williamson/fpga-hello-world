@@ -3,7 +3,7 @@
 # Script to verify SystemVerilog simulation output using Verilator
 
 # Run simulation and capture output
-sim_output=$(./hello_world)
+sim_output=$(ghdl -r hello_world)
 
 # Check if the expected string is in the output
 if echo "$sim_output" | grep -q "Hello world VHDL!"; then
