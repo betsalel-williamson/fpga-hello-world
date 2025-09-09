@@ -18,21 +18,18 @@ permissions:
   contents: read
   packages: write # Grant write permissions for publishing packages
 
-env:
-  DOCKERFILE_PATH: Dockerfile # Assuming Dockerfile is directly in the context directory
-
 jobs:
   build-and-publish-verilog-dev-image:
     uses: ./.github/workflows/build-and-publish-docker-image-template.yaml
     with:
       dockerfile_context_path: ./docker/verilog-dev-env
-      image_name_var: ${{ vars.VERILOG_IMAGE_NAME }}
+      image_name_var: verilog-dev-image
       force_rebuild: ${{ github.event.inputs.force_rebuild }}
 
   verilog-hello-world:
     needs: build-and-publish-verilog-dev-image
     runs-on: ubuntu-latest
-    container: ghcr.io/${{ github.repository }}/${{ vars.VERILOG_IMAGE_NAME }}:latest
+    container: ghcr.io/${{ github.repository }}/verilog-dev-image:latest
 
     steps:
       - name: Checkout repository
@@ -53,13 +50,13 @@ jobs:
     uses: ./.github/workflows/build-and-publish-docker-image-template.yaml
     with:
       dockerfile_context_path: ./docker/systemverilog-dev-env
-      image_name_var: ${{ vars.SYSTEMVERILOG_IMAGE_NAME }}
+      image_name_var: systemverilog-dev-image
       force_rebuild: ${{ github.event.inputs.force_rebuild }}
 
   systemverilog-hello-world:
     needs: build-and-publish-systemverilog-dev-image
     runs-on: ubuntu-latest
-    container: ghcr.io/${{ github.repository }}/${{ vars.SYSTEMVERILOG_IMAGE_NAME }}:latest
+    container: ghcr.io/${{ github.repository }}/systemverilog-dev-image:latest
 
     steps:
       - name: Checkout repository
@@ -79,13 +76,13 @@ jobs:
     uses: ./.github/workflows/build-and-publish-docker-image-template.yaml
     with:
       dockerfile_context_path: ./docker/vhdl-dev-env
-      image_name_var: ${{ vars.VHDL_IMAGE_NAME }}
+      image_name_var: vhdl-dev-image
       force_rebuild: ${{ github.event.inputs.force_rebuild }}
 
   vhdl-hello-world:
     needs: build-and-publish-vhdl-dev-image
     runs-on: ubuntu-latest
-    container: ghcr.io/${{ github.repository }}/${{ vars.VHDL_IMAGE_NAME }}:latest
+    container: ghcr.io/${{ github.repository }}/vhdl-dev-image:latest
 
     steps:
       - name: Checkout repository
