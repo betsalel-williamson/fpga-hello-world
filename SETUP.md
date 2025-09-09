@@ -1,6 +1,6 @@
 # Setup Instructions
 
-This document outlines the necessary steps to set up your local development environment for working with this FPGA project, including tools for Docker, Verilog, SystemVerilog, GitHub Actions linting, and AWS.
+This document outlines the necessary steps to set up your local development environment for working with this FPGA project, including tools for Docker, Verilog, SystemVerilog, VHDL, GitHub Actions linting, and AWS.
 
 **Note:** While the primary focus of these instructions is on macOS, contributions for other operating systems are highly welcome!
 
@@ -54,9 +54,9 @@ Colima provides a container runtime for macOS (and Linux) with minimal overhead,
 
     Save and exit the editor. Colima will then restart with the updated configuration. Refer to the [Colima documentation](https://github.com/abiosoft/colima#mounts) for more advanced mounting configurations.
 
-## 2. Verilog & SystemVerilog Development Tools (Icarus Verilog, Verilator & GTKWave)
+## 2. HDL Development Tools (Icarus Verilog, Verilator, GHDL & GTKWave)
 
-Icarus Verilog is a Verilog compiler that generates an intermediate format (VVVP) which can be executed by a simulator (vvp). Verilator is a fast, open-source Verilog and SystemVerilog simulator. GTKWave is a waveform viewer used to visualize the output of Verilog/SystemVerilog simulations.
+Icarus Verilog is a Verilog compiler that generates an intermediate format (VVVP) which can be executed by a simulator (vvp). Verilator is a fast, open-source Verilog and SystemVerilog simulator. GHDL is an open-source VHDL compiler and simulator. GTKWave is a waveform viewer used to visualize the output of Verilog/SystemVerilog/VHDL simulations.
 
 ### Mac Installation
 
@@ -76,11 +76,18 @@ Due to compatibility issues with GTKWave on macOS 14 (Sonoma) and later, a commu
     brew install verilator
     ```
 
+- **Install GHDL:**
+
+    ```bash
+    brew install ghdl
+    ```
+
 - **Verification:** After installation, verify by running:
 
     ```bash
     iverilog -V
     verilator --version
+    ghdl --version
     gtkwave --version
     ```
 
