@@ -2,10 +2,16 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install necessary tools
+# Install necessary tools verilog
 RUN apt-get update && apt-get install -y \
     make \
     iverilog \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install necessary tools systemverilog
+RUN apt-get update && apt-get install -y \
+    verilator \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -24,7 +30,7 @@ RUN apt-get update && apt-get install -y \
 
 # RUN apt-get update && apt-get install -y \
 #     python3 \
-#     python3-pip \   
+#     python3-pip \
 #     && apt-get clean \
 #     && rm -rf /var/lib/apt/lists/*    
 
