@@ -88,10 +88,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Test SystemVerilog design
+      - name: Test VHDL design
         run: |
           make -C src/vhdl/hello_world test
-          ls src/vhdl/hello_world -F
+          test -f src/vhdl/hello_world/hello_world || { echo "Error: hello_world executable not found!"; exit 1; }
+          ls -l src/vhdl/hello_world
 
       - name: Upload SystemVerilog simulation artifacts
         uses: actions/upload-artifact@v4
