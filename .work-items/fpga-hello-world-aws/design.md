@@ -16,7 +16,7 @@ The **AWS EC2 F2 FPGA Development Kit** is a hardware-software development kit. 
 * **Hardware Development Kit (HDK):** For RTL developers utilizing tools like Xilinx Vivado and other 3rd-party simulation tools.
 * **Software Development Kit (SDK):** For runtime software development, offering Python/C/C++ APIs and CLIs for interacting with the FPGA.
 * **Vitis:** Support for accelerating C/C++ applications.
-* **Examples:** Includes resources such as the Streaming Data Engine (SDE) Library and Virtual Ethernet. [1, 5]
+* **Examples:** Includes resources such as the Streaming Data Engine (SDE) Library and Virtual Ethernet [1, 2].
 
 * **Infrastructure as Code (IaC):** AWS resources (EC2 F2 instance, S3 buckets for AFI storage, IAM roles/policies) are defined using tools like AWS CloudFormation or Terraform. These IaC definitions are version-controlled in a Git repository, enabling cost visibility and control.
 * **Manually Triggered CI/CD Deployment:** An automated pipeline (e.g., GitHub Actions) is configured to allow for a manual trigger to provision/update the AWS infrastructure and deploy the host application. This manual gate provides **cost governance** during development, preventing unnecessary spend.
@@ -28,18 +28,18 @@ The **AWS EC2 F2 FPGA Development Kit** is a hardware-software development kit. 
 
 ### 2.1. FinOps and Cost Considerations for Amazon EC2 F2 Instances
 
-Amazon EC2 F2 Instances are powered by AMD Virtex UltraScale+ HBM VU47P FPGAs and feature 3rd generation AMD EPYC (Milan) processors [1, 3, 5]. Deploying and running FPGA workloads on AWS F2 instances can be expensive. FinOps practices manage these costs. The primary cost drivers are:
+Amazon EC2 F2 Instances are powered by AMD Virtex UltraScale+ HBM VU47P FPGAs and feature 3rd generation AMD EPYC (Milan) processors [1, 3]. Deploying and running FPGA workloads on AWS F2 instances can be expensive. FinOps practices manage these costs. The primary cost drivers are:
 
 * **EC2 F2 Instance Uptime:** F2 instances are specialized and incur hourly charges. This is a primary area for potential cost overruns.
-  * **F2 Instance Types and Approximate On-Demand Hourly Costs:** F2 instances are available in specific regions like US East (N. Virginia), Europe (London), and US West (Oregon) [3, 4, 9]. Common sizes and their approximate On-Demand hourly costs are:
-    * `f2.6xlarge`: This instance type offers a lower-cost entry point for FPGA computing with 1 FPGA, 24 vCPUs, 256 GB of system memory, and 950 GB of NVMe SSD local storage [9].
-    * `f2.12xlarge`: This instance type is available in regions like US East (N. Virginia) and generally starts at approximately $3.96 per hour [6, 10]. It features 48 vCPUs, 512 GiB of memory, and 2 FPGAs [6].
-    * `f2.48xlarge`: This instance type is available in regions like US East (N. Virginia) and has a proportionally higher hourly cost, starting around $15.84 per hour [8]. It features 192 vCPUs, 2048 GiB of memory, and up to 8 FPGAs [1, 7, 8].
+  * **F2 Instance Types and Approximate On-Demand Hourly Costs:** F2 instances are available in specific regions like US East (N. Virginia), Europe (London), and US West (Oregon) [3]. Common sizes and their approximate On-Demand hourly costs are:
+    * `f2.6xlarge`: This instance type offers a lower-cost entry point for FPGA computing with 1 FPGA, 24 vCPUs, 256 GB of system memory, and 950 GB of NVMe SSD local storage [4].
+    * `f2.12xlarge`: This instance type is available in regions like US East (N. Virginia) and generally starts at approximately $3.96 per hour [5, 6]. It features 48 vCPUs, 512 GiB of memory, and 2 FPGAs [5].
+    * `f2.48xlarge`: This instance type is available in regions like US East (N. Virginia) and has a proportionally higher hourly cost, starting around $15.84 per hour [7]. It features 192 vCPUs, 2048 GiB of memory, and up to 8 FPGAs.
     * For the most precise and up-to-date pricing, consult the official AWS EC2 Pricing page for F2 instances in your chosen region. AWS prices are subject to change.
   * **Key Features of F2 Instances Relevant to Cost:**
-    * Up to 8 AMD Virtex UltraScale+ HBM VU47P FPGAs per instance [1, 3, 5]: More FPGAs generally mean higher cost per hour, but also more parallel processing power.
-    * High Bandwidth Memory (HBM): Each FPGA has 16 GiB of HBM and 64 GiB of DDR4 memory [1, 3, 5], which can accelerate workloads, potentially reducing the total time an instance needs to run.
-    * Powerful CPU (192 vCPU AMD EPYC processor for `f2.48xlarge`) [1, 3, 5]: The instances come with substantial CPU resources, which might be beneficial for certain aspects of development flow but also contribute to the cost.
+    * Up to 8 AMD Virtex UltraScale+ HBM VU47P FPGAs per instance [1, 3]: More FPGAs generally mean higher cost per hour, but also more parallel processing power.
+    * High Bandwidth Memory (HBM): Each FPGA has 16 GiB of HBM and 64 GiB of DDR4 memory [1, 3]: This can accelerate workloads, potentially reducing the total time an instance needs to run.
+    * Powerful CPU (192 vCPU AMD EPYC processor for `f2.48xlarge`) [1, 3]: The instances come with substantial CPU resources, which might be beneficial for certain aspects of development flow but also contribute to the cost.
     * Price-Performance: AWS states up to 60% better price-performance than F1 instances [1], meaning more work can be achieved for the same or less cost, if managed effectively.
 * **AFI Generation:** While the build process is part of CI, the underlying AWS services used for AFI generation (e.g., S3 for intermediate files, potentially compute for synthesis if not done locally/in CI) can contribute to costs. Understanding these hidden costs is a FinOps concern.
 * **S3 Storage:** Storing AFIs and other build artifacts in S3 incurs storage costs, though typically minor compared to F2 instance uptime. Proper lifecycle policies are a FinOps optimization.
@@ -50,7 +50,7 @@ Amazon EC2 F2 Instances are powered by AMD Virtex UltraScale+ HBM VU47P FPGAs an
 * **Aggressive Stop/Start Automation:** This is a highly impactful cost-saving measure. F2 instances are stopped immediately when not actively in use. AWS Lambda with CloudWatch Events or the AWS Instance Scheduler are utilized to automatically stop instances during off-hours (evenings, weekends, holidays).
 * **Pre-Deployment Verification:** Thorough local simulation and CI build verification (including waveform analysis) are completed *before* triggering an AWS deployment. This reduces the need for costly on-cloud debugging and iteration.
 * **Timely Teardown & Automation:** F2 instances and associated resources are terminated or de-provisioned immediately after testing or verification is complete. Automated teardown scripts are crucial for **cost avoidance** and preventing idle resource charges.
-* **Resource Sizing & Optimization:** The smallest necessary F2 instance type for initial "Hello World" testing is used [9]. Resource utilization is continuously evaluated to right-size instances as the project evolves.
+* **Resource Sizing & Optimization:** The smallest necessary F2 instance type for initial "Hello World" testing is used. Resource utilization is continuously evaluated to right-size instances as the project evolves.
 * **AFI Lifecycle Management:** Policies are implemented to automatically delete old or unused AFIs from S3, optimizing storage costs.
 * **Budget Guardrails (AWS Budget Alerts):** AWS budget alerts are configured to notify stakeholders of potential cost overruns, enabling proactive intervention and supporting financial control. This component supports the FinOps strategy. AWS Budgets can also be configured to take automated actions, such as stopping EC2 instances, when a threshold is exceeded.
 
@@ -126,22 +126,21 @@ N/A for this initial "Hello World" example.
 
 ## References
 
-[1] Amazon EC2 F2 Instances. AWS. Retrieved from [https://aws.amazon.com/ec2/instance-types/f2/](https://aws.amazon.com/ec2/instance-types/f2/)
-[2] Second Generation FPGA-Powered Amazon EC2 Instances (F2). CloudThat. (2025, February 24). Retrieved from [https://www.cloudthat.com/blog/second-generation-fpga-powered-amazon-ec2-instances-f2/](https://www.cloudthat.com/blog/second-generation-fpga-powered-amazon-ec2-instances-f2/)
-[3] Now Available – Second-Generation FPGA-Powered Amazon EC2 instances (F2). AWS. (2024, December 11). Retrieved from [https://aws.amazon.com/blogs/aws/now-available-second-generation-fpga-powered-amazon-ec2-instances-f2/](https://aws.amazon.com/blogs/aws/now-available-second-generation-fpga-powered-amazon-ec2-instances-f2/)
-[4] Amazon EC2 F2 instances, featuring up to 8 FPGAs, are generally available. Retrieved from [https://aws.amazon.com/blogs/aws/amazon-ec2-f2-instances-featuring-up-to-8-fpgas-are-generally-available/](https://aws.amazon.com/blogs/aws/amazon-ec2-f2-instances-featuring-up-to-8-fpgas-are-generally-available/)
-[5] AWS EC2 FPGA Development Kit User Guide. Retrieved from [https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-f2-instances.html](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-f2-instances.html)
-[6] f2.12xlarge pricing and specs - Amazon EC2 Instance Comparison. Vantage. Retrieved from [https://www.vantage.sh/aws/ec2/f2.12xlarge](https://www.vantage.sh/aws/ec2/f2.12xlarge)
-[7] Amazon EC2 Instance Type f2.48xlarge. Retrieved from [https://aws.amazon.com/ec2/instance-types/f2/f2.48xlarge/](https://aws.amazon.com/ec2/instance-types/f2/f2.48xlarge/)
-[8] f2.48xlarge pricing and specs - Amazon EC2 Instance Comparison. Vantage. Retrieved from [https://www.vantage.sh/aws/ec2/f2.48xlarge](https://www.vantage.sh/aws/ec2/f2.48xlarge)
-[9] Announcing the general availability of Amazon EC2 F2.6xlarge, a new F2 instance size. AWS. (2025, February 5). Retrieved from [https://aws.amazon.com/blogs/aws/announcing-the-general-availability-of-amazon-ec2-f2-6xlarge-a-new-f2-instance-size/](https://aws.amazon.com/blogs/aws/announcing-the-general-availability-of-amazon-ec2-f2-6xlarge-a-new-f2-instance-size/)
-[10] EC2 Instance Types & Pricing. Retrieved from [https://instances.vantage.sh/](https://instances.vantage.sh/)
-[11] AWS EC2 F1 instance is no longer supported for new users - Google Groups. (2025, April 7). Retrieved from [https://groups.google.com/g/chipyard/c/6w-4w-2W0zQ/m/x_0X_0W0zQ](https://groups.google.com/g/chipyard/c/6w-4w-2W0zQ/m/x_0X_0W0zQ)
-[12] What happened to AWS F1 : r/FPGA - Reddit. (2025, March 25). Retrieved from [https://www.reddit.com/r/FPGA/comments/1cmq1qj/what_happened_to_aws_f1/](https://www.reddit.com/r/FPGA/comments/1cmq1qj/what_happened_to_aws_f1/)
-[13] FPGA Developer AMI Updates - AWS re:Post. (2024, November 4). Retrieved from [https://repost.aws/questions/QUq7R0qLd0Q/fpga-developer-ami-updates](https://repost.aws/questions/QUq7R0qLd0Q/fpga-developer-ami-updates)
-[14] Who is using ec2 f1 instances? : r/aws - Reddit. (2024, February 13). Retrieved from [https://www.reddit.com/r/aws/comments/1aps0j2/who_is_using_ec2_f1_instances/](https://www.reddit.com/r/aws/comments/1aps0j2/who_is_using_ec2_f1_instances/)
-[15] Amazon EC2 F1 Instances. awsstatic.com. Retrieved from [https://d1.awsstatic.com/products/EC2/f1-instances_overview.pdf](https://d1.awsstatic.com/products/EC2/f1-instances_overview.pdf)
+[1] Amazon EC2 F2 Instances. AWS. Retrieved from <https://aws.amazon.com/ec2/instance-types/f2/>
+[2] AWS EC2 FPGA Development Kit User Guide. Retrieved from <https://awsdocs-fpga-f2.readthedocs-hosted.com/>
+[3] Now Available – Second-Generation FPGA-Powered Amazon EC2 instances (F2). AWS. (2024, December 11). Retrieved from <https://aws.amazon.com/blogs/aws/now-available-second-generation-fpga-powered-amazon-ec2-instances-f2/>
+[4] f2.6xlarge pricing and specs - Amazon EC2 Instance Comparison. Vantage. Retrieved from  <https://instances.vantage.sh/aws/ec2/f2.6xlarge?currency=USD> - 24 vCPUs, 256 GiB memory, 12.5 Gibps bandwidth; starting at ~$0.749/hr
+[5] f2.12xlarge pricing and specs – Amazon EC2 Instance Comparison. Vantage. Retrieved from <https://instances.vantage.sh/aws/ec2/f2.12xlarge> — 48 vCPUs, 512 GiB memory, 25 Gbps bandwidth; starting at ~$3.96/hr
+[6] EC2 Instance Types & Pricing. Retrieved from <https://instances.vantage.sh/>
+[7] f2.48xlarge pricing and specs – Amazon EC2 Instance Comparison. Vantage. Retrieved from <https://instances.vantage.sh/aws/ec2/f2.48xlarge>
 
-<https://awsdocs-fpga-f2.readthedocs-hosted.com/>
+## Additional Reading
 
-<https://aws.amazon.com/ec2/instance-types/f2/>
+[9] Second Generation FPGA-Powered Amazon EC2 Instances (F2). CloudThat. (2025, February 24). Retrieved from <https://www.cloudthat.com/resources/blog/second-generation-fpga-powered-amazon-ec2-instances-f2>
+[10] AWS EC2 F1 instance is no longer supported for new users – Google Groups. (2025, April 7). Retrieved from Google Groups. Note: AWS informed that “F1 instances are no longer available to new users... AWS plans to gradually replace them entirely with F2 instances.” (<https://groups.google.com/g/chipyard/c/vCbYQC-ZqSI>)
+[11] What happened to AWS F1 : r/FPGA – Reddit. (2025, March 25). Retrieved from Reddit. Quote:
+> “The current aws-f1 (small xdma and tiny) only supports Vitis 2024.1 and this version has tons of breaking changes compared to the older versions.”
+<https://www.reddit.com/r/FPGA/comments/1jjgpps/what_happened_to_aws_f1/>
+[12] FPGA Developer AMI Updates – AWS re:Post. (2024, November 4). Retrieved from AWS re:Post. Notes that Amazon Linux 1 (Amazon Linux AMI) reached EOL as of December 31, 2023, and no longer receives security updates. (<https://repost.aws/questions/QUVZcxRu1uQQ271eISBAPC3g/fpga-developer-ami-updates>)
+[13] Who is using ec2 f1 instances? : r/aws – Reddit. (2024, February 13). <https://www.reddit.com/r/aws/comments/1aplb1n/who_is_using_ec2_f1_instances/>
+[14] Amazon EC2 F1 Instances. awsstatic.com. Retrieved from <https://d1.awsstatic.com/Amazon_EC2_F1_Infographic.pdf> — Overview of F1, its FPGA capabilities, FPGA Developer AMI and HDK usage, and claims of up to 30× acceleration vs CPU.
