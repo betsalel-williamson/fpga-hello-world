@@ -88,12 +88,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Test SystemVerilog design
+      - name: Test VHDL design
         run: make -C src/vhdl/hello_world test
 
-      - name: Upload SystemVerilog simulation artifacts
+      - name: Verify VHDL executable exists
+        run: |
+          test -f src/vhdl/hello_world/hello_world || { echo "Error: hello_world executable not found for artifact upload!"; exit 1; }
+
+      - name: Upload VHDL simulation artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: systemverilog-simulation-artifacts
+          name: vhdl-simulation-artifacts
           path: |
             src/vhdl/hello_world/hello_world
