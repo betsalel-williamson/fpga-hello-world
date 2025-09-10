@@ -82,6 +82,17 @@ Due to compatibility issues with GTKWave on macOS 14 (Sonoma) and later, a commu
     brew install ghdl
     ```
 
+### HDL Tools Ubuntu Installation
+
+For Ubuntu users, GHDL with the GCC backend can be installed via apt-get.
+
+- **Install GHDL (GCC Backend):**
+
+    ```bash
+    sudo apt-get update
+    sudo apt-get install -y ghdl-gcc
+    ```
+
 - **Verification:** After installation, verify by running:
 
     ```bash
