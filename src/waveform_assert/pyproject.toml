@@ -1,0 +1,23 @@
+[project]
+name = "waveform-assert"
+version = "0.1.0"
+requires-python = "==3.12.11"
+
+dependencies = [
+    "vcdvcd",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["waveform_assert"]
+
+[dependency-groups]
+dev = [
+    "black==24.4.2",
+    "flake8==7.1.0",
+    "pytest==8.2.2",
+    "pytest-cov==5.0.0",
+]
