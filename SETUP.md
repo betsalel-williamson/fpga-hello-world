@@ -10,7 +10,7 @@ Add a `.env` with necessary credentials to use GeminiCLI. The git submodule `gen
 
 ## 1. Docker
 
-Docker is used to build and run the specialized FPGA development environment image, ensuring a consistent and reproducible build process. For macOS users, especially those with Apple Silicon, [Colima](https://github.com/abiosoft/colima) is a recommended lightweight alternative to Docker Desktop.
+Docker is used to build and run the specialized FPGA development environment images, ensuring a consistent and reproducible build process. For macOS users, especially those with Apple Silicon, [Colima](https://github.com/abiosoft/colima) is a recommended lightweight alternative to Docker Desktop.
 
 - **Installation Guide (Docker Desktop):** [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/)
 
@@ -54,9 +54,17 @@ Colima provides a container runtime for macOS (and Linux) with minimal overhead,
 
     Save and exit the editor. Colima will then restart with the updated configuration. Refer to the [Colima documentation](https://github.com/abiosoft/colima#mounts) for more advanced mounting configurations.
 
-## 2. HDL Development Tools (OSS CAD Suite & vhdlfmt)
+### 1.2. Building Development Docker Images
 
-The OSS CAD Suite provides a comprehensive collection of open-source tools for digital logic design, including RTL synthesis, formal hardware verification, place & route, FPGA programming, and simulation tools like Icarus Verilog, Verilator, GHDL, and GTKWave. `vhdlfmt` is a dedicated VHDL formatter.
+To build all the necessary development Docker images (base, SystemVerilog, Verilog, and VHDL), use the provided script:
+
+```bash
+./docker/build_all_dev_images.sh
+```
+
+## 2. HDL Development Tools (OSS CAD Suite & vsg)
+
+The OSS CAD Suite provides a comprehensive collection of open-source tools for digital logic design, including RTL synthesis, formal hardware verification, place & route, FPGA programming, and simulation tools like Icarus Verilog, Verilator, GHDL, and GTKWave. `vsg` is a dedicated VHDL formatter.
 
 ### Installation
 
@@ -69,14 +77,6 @@ To install the OSS CAD Suite, use the provided installation script. This script 
     ./scripts/install_oss_cad_suite.sh ./scripts/oss_cad_suite_downloads/oss-cad-suite*.tgz
     ```
 
-- **Install vhdlfmt (if not included in OSS CAD Suite):**
-
-    ```bash
-    # For macOS:
-    brew tap hdl/hdl
-    brew install vhdlfmt
-    ```
-
 ### Verification
 
 After installation, verify the tools by running:
@@ -86,7 +86,7 @@ iverilog -V
 verilator --version
 ghdl --version
 gtkwave --version
-vhdlfmt --version # If vhdlfmt was installed separately
+vsg --version
 ```
 
 ### Viewing Simulation Output Online

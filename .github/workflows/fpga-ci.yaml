@@ -19,17 +19,18 @@ permissions:
   packages: write # Grant write permissions for publishing packages
 
 jobs:
-  build-and-publish-verilog-dev-image:
+  build-and-publish-fpga-base-dev-image:
     uses: ./.github/workflows/build-and-publish-docker-image-template.yaml
     with:
-      dockerfile_context_path: ./docker/verilog-dev-env
-      image_name_var: verilog-dev-image
+      dockerfile_context_path: .
+      dockerfile_path: docker/fpga-base-dev-env/Dockerfile
+      image_name_var: fpga-base-dev-image
       force_rebuild: false
 
   verilog-hello-world:
-    needs: build-and-publish-verilog-dev-image
+    needs: build-and-publish-fpga-base-dev-image
     runs-on: ubuntu-latest
-    container: ghcr.io/${{ github.repository }}/verilog-dev-image:latest
+    container: ghcr.io/${{ github.repository }}/fpga-base-dev-image:latest
 
     steps:
       - name: Checkout repository
@@ -46,17 +47,10 @@ jobs:
             src/verilog/hello_world/*.vcd
             src/verilog/hello_world/*.vvp
 
-  build-and-publish-systemverilog-dev-image:
-    uses: ./.github/workflows/build-and-publish-docker-image-template.yaml
-    with:
-      dockerfile_context_path: ./docker/systemverilog-dev-env
-      image_name_var: systemverilog-dev-image
-      force_rebuild: false
-
   systemverilog-hello-world:
-    needs: build-and-publish-systemverilog-dev-image
+    needs: build-and-publish-fpga-base-dev-image
     runs-on: ubuntu-latest
-    container: ghcr.io/${{ github.repository }}/systemverilog-dev-image:latest
+    container: ghcr.io/${{ github.repository }}/fpga-base-dev-image:latest
 
     steps:
       - name: Checkout repository
@@ -72,17 +66,10 @@ jobs:
           path: |
             src/systemverilog/hello_world/obj_dir/
 
-  build-and-publish-vhdl-dev-image:
-    uses: ./.github/workflows/build-and-publish-docker-image-template.yaml
-    with:
-      dockerfile_context_path: ./docker/vhdl-dev-env
-      image_name_var: vhdl-dev-image
-      force_rebuild: false
-
   vhdl-hello-world:
-    needs: build-and-publish-vhdl-dev-image
+    needs: build-and-publish-fpga-base-dev-image
     runs-on: ubuntu-latest
-    container: ghcr.io/${{ github.repository }}/vhdl-dev-image:latest
+    container: ghcr.io/${{ github.repository }}/fpga-base-dev-image:latest
 
     steps:
       - name: Checkout repository

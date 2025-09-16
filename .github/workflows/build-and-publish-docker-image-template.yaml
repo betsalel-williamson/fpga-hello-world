@@ -7,6 +7,10 @@ on:
         required: true
         type: string
         description: 'The path to the Dockerfile context.'
+      dockerfile_path:
+        required: true
+        type: string
+        description: 'The path to the Dockerfile relative to the context.'
       image_name_var:
         required: true
         type: string
@@ -81,7 +85,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ${{ inputs.dockerfile_context_path }}
-          file: ${{ inputs.dockerfile_context_path }}/Dockerfile
+          file: ${{ inputs.dockerfile_path }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           cache-from: ${{ inputs.force_rebuild == 'true' && '' || format('type=gha,scope={0}-build-cache', inputs.image_name_var) }}
