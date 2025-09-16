@@ -19,18 +19,18 @@ permissions:
   packages: write # Grant write permissions for publishing packages
 
 jobs:
-  build-and-publish-fpga-base-dev-image:
+  build-and-publish-fpga-base-ci-image:
     uses: ./.github/workflows/build-and-publish-docker-image-template.yaml
     with:
       dockerfile_context_path: .
-      dockerfile_path: docker/fpga-base-dev-env/Dockerfile
-      image_name_var: fpga-base-dev-image
+      dockerfile_path: docker/fpga-base-ci-env/Dockerfile
+      image_name_var: fpga-base-ci-image
       force_rebuild: false
 
   verilog-hello-world:
-    needs: build-and-publish-fpga-base-dev-image
+    needs: build-and-publish-fpga-base-ci-image
     runs-on: ubuntu-latest
-    container: ghcr.io/${{ github.repository }}/fpga-base-dev-image:latest
+    container: ghcr.io/${{ github.repository }}/fpga-base-ci-image:latest
 
     steps:
       - name: Checkout repository
@@ -48,9 +48,9 @@ jobs:
             src/verilog/hello_world/*.vvp
 
   systemverilog-hello-world:
-    needs: build-and-publish-fpga-base-dev-image
+    needs: build-and-publish-fpga-base-ci-image
     runs-on: ubuntu-latest
-    container: ghcr.io/${{ github.repository }}/fpga-base-dev-image:latest
+    container: ghcr.io/${{ github.repository }}/fpga-base-ci-image:latest
 
     steps:
       - name: Checkout repository
@@ -67,9 +67,9 @@ jobs:
             src/systemverilog/hello_world/obj_dir/
 
   vhdl-hello-world:
-    needs: build-and-publish-fpga-base-dev-image
+    needs: build-and-publish-fpga-base-ci-image
     runs-on: ubuntu-latest
-    container: ghcr.io/${{ github.repository }}/fpga-base-dev-image:latest
+    container: ghcr.io/${{ github.repository }}/fpga-base-ci-image:latest
 
     steps:
       - name: Checkout repository
