@@ -1,0 +1,8 @@
+[tasks]
+build = "iverilog -o hello_world.vvp hello_world.v"
+simulate = "vvp hello_world.vvp"
+verify = "./verify_simulation.sh"
+test = "mise run build && mise run simulate && mise run verify"
+clean = "rm -f *.vvp *.vcd"
+format = "verible-verilog-format --inplace hello_world.v"
+install = ""

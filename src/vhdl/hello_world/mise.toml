@@ -1,0 +1,8 @@
+[tasks]
+build = "ghdl -a hello_world.vhdl && ghdl -e hello_world"
+simulate = "ghdl -r hello_world"
+verify = "./verify_simulation.sh"
+test = "mise run build && mise run verify"
+clean = "rm -f *.o *.cf hello_world.out hello_world *.fst"
+format = "vsg --fix hello_world.vhdl"
+install = ""

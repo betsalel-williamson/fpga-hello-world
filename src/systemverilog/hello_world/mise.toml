@@ -1,0 +1,8 @@
+[tasks]
+build = "verilator --binary -j 0 -Wall hello_world.sv"
+simulate = "./obj_dir/Vhello_world"
+verify = "./verify_simulation.sh"
+test = "mise run build && mise run simulate && mise run verify"
+clean = "rm -rf obj_dir"
+format = "verible-verilog-format --inplace hello_world.sv"
+install = ""

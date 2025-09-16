@@ -1,0 +1,37 @@
+[tools]
+python = "3.12.11"
+
+[tasks]
+init = """
+uv venv
+uv pip install -r requirements.txt
+"""
+
+install-all = """
+mise run install -C src/systemverilog/hello_world/ && \
+mise run install -C src/verilog/hello_world/ && \
+mise run install -C src/vhdl/hello_world/
+"""
+clean-all = """
+mise run clean -C src/systemverilog/hello_world/ && \
+mise run clean -C src/verilog/hello_world/ && \
+mise run clean -C src/vhdl/hello_world/
+"""
+format-all = """
+mise run format -C src/systemverilog/hello_world/ && \
+mise run format -C src/verilog/hello_world/ && \
+mise run format -C src/vhdl/hello_world/
+"""
+build-all = """
+mise run build -C src/systemverilog/hello_world/ && \
+mise run build -C src/verilog/hello_world/ && \
+mise run build -C src/vhdl/hello_world/
+"""
+test-all = """
+mise run test -C src/systemverilog/hello_world/ && \
+mise run test -C src/verilog/hello_world/ && \
+mise run test -C src/vhdl/hello_world/
+"""
+
+# hk integration (placeholder - actual commands will depend on hk setup)
+# pre-commit = "hk lint && hk format"
