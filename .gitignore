@@ -1,1 +1,16 @@
 *.env
+
+# python
+uv.lock
+build
+.venv/
+*.egg-info/
+*.pyc
+__pycache__/
+
+.pytest_cache/
+.coverage
+coverage.xml
+pytest-report.xml
+
+oss_cad_suite_downloads/
