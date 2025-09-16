@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
 
 # Install necessary tools for SystemVerilog
 RUN apt-get update && apt-get install -y \
+    make \
     verilator \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
