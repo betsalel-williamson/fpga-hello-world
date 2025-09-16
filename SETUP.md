@@ -54,53 +54,40 @@ Colima provides a container runtime for macOS (and Linux) with minimal overhead,
 
     Save and exit the editor. Colima will then restart with the updated configuration. Refer to the [Colima documentation](https://github.com/abiosoft/colima#mounts) for more advanced mounting configurations.
 
-## 2. HDL Development Tools (Icarus Verilog, Verilator, GHDL & GTKWave)
+## 2. HDL Development Tools (OSS CAD Suite & vhdlfmt)
 
-Icarus Verilog is a Verilog compiler that generates an intermediate format (VVVP) which can be executed by a simulator (vvp). Verilator is a fast, open-source Verilog and SystemVerilog simulator. GHDL is an open-source VHDL compiler and simulator. GTKWave is a waveform viewer used to visualize the output of Verilog/SystemVerilog/VHDL simulations.
+The OSS CAD Suite provides a comprehensive collection of open-source tools for digital logic design, including RTL synthesis, formal hardware verification, place & route, FPGA programming, and simulation tools like Icarus Verilog, Verilator, GHDL, and GTKWave. `vhdlfmt` is a dedicated VHDL formatter.
 
-### HDL Tools Mac Installation
+### Installation
 
-Due to compatibility issues with GTKWave on macOS 14 (Sonoma) and later, a community Homebrew tap is recommended for installation.
+To install the OSS CAD Suite, use the provided installation script. This script will download and extract the suite to a standard location, and set up the necessary environment variables.
 
-- **Install Icarus Verilog and GTKWave from a community tap**:
-
-    ```bash
-    brew install icarus-verilog
-    brew tap randomplum/gtkwave
-    brew install --HEAD randomplum/gtkwave/gtkwave
-    ```
-
-- **Install Verilator:**
+- **Install OSS CAD Suite:**
 
     ```bash
-    brew install verilator
+    ./scripts/download_oss_cad_suite_static.sh
+    ./scripts/install_oss_cad_suite.sh ./scripts/oss_cad_suite_downloads/oss-cad-suite*.tgz
     ```
 
-- **Install GHDL:**
+- **Install vhdlfmt (if not included in OSS CAD Suite):**
 
     ```bash
-    brew install ghdl
+    # For macOS:
+    brew tap hdl/hdl
+    brew install vhdlfmt
     ```
 
-### HDL Tools Ubuntu Installation
+### Verification
 
-For Ubuntu users, GHDL with the GCC backend can be installed via apt-get.
+After installation, verify the tools by running:
 
-- **Install GHDL (GCC Backend):**
-
-    ```bash
-    sudo apt-get update
-    sudo apt-get install -y ghdl-gcc
-    ```
-
-- **Verification:** After installation, verify by running:
-
-    ```bash
-    iverilog -V
-    verilator --version
-    ghdl --version
-    gtkwave --version
-    ```
+```bash
+iverilog -V
+verilator --version
+ghdl --version
+gtkwave --version
+vhdlfmt --version # If vhdlfmt was installed separately
+```
 
 ### Viewing Simulation Output Online
 
