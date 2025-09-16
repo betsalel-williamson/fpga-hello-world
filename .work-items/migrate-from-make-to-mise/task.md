@@ -2,7 +2,7 @@
 
 ## Clear Objective
 
-Migrate the project's task management from `Makefile`s to `mise-en-place` by creating a root `mise.toml` file, removing `Makefile`s from `src/` subdirectories, and establishing `mise.toml` files in `src/` subdirectories for their specific tasks. The root `mise.toml` will focus on global tools (e.g., `python`) and orchestration, delegating sub-repository specific tasks. Integrate `hk` for managing commit hooks and linters, and establish code formatters for HDLs. **Note: HDL tools (`verilator`, `iverilog`, `ghdl`, `verible-verilog-format`, `vhdlfmt`) are assumed to be installed manually on the system and available in the PATH. Future work may involve integrating these into a tool manager like Aqua or Mise registry.**
+Migrate the project's task management from `Makefile`s to `mise-en-place` by creating a root `mise.toml` file, removing `Makefile`s from `src/` subdirectories, and establishing `mise.toml` files in `src/` subdirectories for their specific tasks. The root `mise.toml` will focus on global tools (e.g., `python`) and orchestration, delegating sub-repository specific tasks. Integrate `hk` for managing commit hooks and linters, and establish code formatters for HDLs. **Note: HDL tools (`verilator`, `iverilog`, `ghdl`, `verible-verilog-format`, `vsg`) are assumed to be installed manually on the system and available in the PATH. Future work may involve integrating these into a tool manager like Aqua or Mise registry.**
 
 ## Acceptance Criteria
 
@@ -12,7 +12,7 @@ Migrate the project's task management from `Makefile`s to `mise-en-place` by cre
 - All original `Makefile` tasks can be executed successfully via `mise run <task-name>` or `mise run <task-name> -C <path>`.
 - Global tasks like `install-all`, `clean-all` function correctly.
 - `hk` is integrated to manage commit hooks and linters.
-- `Verible` is configured for SystemVerilog and Verilog formatting, and `vhdlfmt` for VHDL formatting. These tools are expected to be installed manually on the system.
+- `Verible` is configured for SystemVerilog and Verilog formatting, and `vsg` for VHDL formatting. These tools are expected to be installed manually on the system.
 
 ## Requirements Traceability
 
@@ -29,13 +29,13 @@ This task supports the overall goal of unifying task management and improving de
     - `mise run clean-all`
 5. Run sub-repository specific tasks (e.g., `mise run build -C src/systemverilog/hello_world/`, `mise run test -C src/verilog/hello_world/`).
 6. Verify `hk` is correctly configured and commit hooks/linters are working as expected.
-7. Verify that `Verible` formats SystemVerilog and Verilog files correctly, and `vhdlfmt` formats VHDL files correctly.
+7. Verify that `Verible` formats SystemVerilog and Verilog files correctly, and `vsg` formats VHDL files correctly.
 
 # Task Step: Update Root mise.toml for Sub-repository Management and Global Tasks
 
 ## Clear Objective
 
-Update the root `mise.toml` file to include a `[tools]` section for managing language versions, global tasks for installing and cleaning sub-repositories. Ensure that sub-repository specific tasks are handled by their respective sub-repository `mise.toml` files. Integrate `hk` for commit hooks and linters, and configure HDL formatters. **Note: HDL tools (`verilator`, `iverilog`, `ghdl`, `verible-verilog-format`, `vhdlfmt`) are assumed to be installed manually on the system and available in the PATH. Future work may involve integrating these into a tool manager like Aqua or Mise registry.**
+Update the root `mise.toml` file to include a `[tools]` section for managing language versions, global tasks for installing and cleaning sub-repositories. Ensure that sub-repository specific tasks are handled by their respective sub-repository `mise.toml` files. Integrate `hk` for commit hooks and linters, and configure HDL formatters. **Note: HDL tools (`verilator`, `iverilog`, `ghdl`, `verible-verilog-format`, `vsg`) are assumed to be installed manually on the system and available in the PATH. Future work may involve integrating these into a tool manager like Aqua or Mise registry.**
 
 ## Acceptance Criteria
 
@@ -44,7 +44,7 @@ Update the root `mise.toml` file to include a `[tools]` section for managing lan
 - The `install-all` task correctly uses `mise run install -C <path>` for `src/systemverilog/hello_world/`, `src/verilog/hello_world/`, and `src/vhdl/hello_world/`.
 - The `clean-all` task correctly uses `mise run clean -C <path>` for `src/systemverilog/hello_world/`, `src/verilog/hello_world/`, and `src/vhdl/hello_world/`.
 - `hk` is configured in the root `mise.toml` to run commit hooks and linters.
-- `Verible` and `vhdlfmt` are configured in the root `mise.toml` or relevant sub-repository `mise.toml` files for formatting HDL code. These tools are expected to be installed manually on the system.
+- `Verible` and `vsg` are configured in the root `mise.toml` or relevant sub-repository `mise.toml` files for formatting HDL code. These tools are expected to be installed manually on the system.
 
 ## Requirements Traceability
 

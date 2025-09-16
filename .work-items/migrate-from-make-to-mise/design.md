@@ -6,7 +6,7 @@ To migrate the project's task management from `Makefile`s to `mise-en-place` for
 
 ## 2. Technical Design
 
-The migration involves replacing `Makefile`s in `src/systemverilog/hello_world/`, `src/verilog/hello_world/`, and `src/vhdl/hello_world/` with equivalent tasks defined in new `mise.toml` files within those directories. A root `mise.toml` file will be introduced to define global tools (e.g., `python`) and orchestrate `install-all` and `clean-all` tasks for these `src/` sub-repositories, delegating sub-repository specific build and initialization tasks to their respective `mise.toml` files. Additionally, `hk` will be integrated to manage commit hooks and linters, ensuring code quality and consistency. For HDL code formatting, `Verible` will be used for SystemVerilog and Verilog, and `vhdlfmt` will be used for VHDL. **Note: HDL tools (`verilator`, `iverilog`, `ghdl`, `verible-verilog-format`, `vhdlfmt`) are assumed to be installed manually on the system and available in the PATH. Future work may involve integrating these into a tool manager like Aqua or Mise registry.** This aligns with the project's goal of consolidating tooling and simplifying the development environment setup.
+The migration involves replacing `Makefile`s in `src/systemverilog/hello_world/`, `src/verilog/hello_world/`, and `src/vhdl/hello_world/` with equivalent tasks defined in new `mise.toml` files within those directories. A root `mise.toml` file will be introduced to define global tools (e.g., `python`) and orchestrate `install-all` and `clean-all` tasks for these `src/` sub-repositories, delegating sub-repository specific build and initialization tasks to their respective `mise.toml` files. Additionally, `hk` will be integrated to manage commit hooks and linters, ensuring code quality and consistency. For HDL code formatting, `Verible` will be used for SystemVerilog and Verilog, and `vsg` will be used for VHDL. **Note: HDL tools (`verilator`, `iverilog`, `ghdl`, `verible-verilog-format`, `vsg`) are assumed to be installed manually on the system and available in the PATH. Future work may involve integrating these into a tool manager like Aqua or Mise registry.** This aligns with the project's goal of consolidating tooling and simplifying the development environment setup.
 
 ## 3. Key Changes
 
@@ -24,7 +24,7 @@ N/A
 - **Root `mise.toml`**: A new file introduced at the project root to define and manage project-level tools (e.g., `python`) and global orchestration tasks (e.g., `install-all`, `clean-all`). It will *not* contain sub-repository specific build or initialization tasks.
 - **Sub-repository `mise.toml` files**: New files in `src/systemverilog/hello_world/`, `src/verilog/hello_world/`, and `src/vhdl/hello_world/` to define and manage tasks specific to those sub-projects, including their build and initialization processes.
 - **`hk` integration**: `hk` will be used to manage commit hooks and linters, ensuring consistent code quality.
-- **HDL Formatters**: `Verible` will be integrated for SystemVerilog and Verilog formatting, and `vhdlfmt` for VHDL formatting. These tools are expected to be installed manually on the system.
+- **HDL Formatters**: `Verible` will be integrated for SystemVerilog and Verilog formatting, and `vsg` for VHDL formatting. These tools are expected to be installed manually on the system.
 
 ## 4. Alternatives Considered
 
@@ -34,4 +34,4 @@ N/A
 ## 5. Out of Scope
 
 - Migration of `make` specific features beyond script execution.
-- Direct management of HDL tools (`verilator`, `iverilog`, `ghdl`, `verible-verilog-format`, `vhdlfmt`) by `mise` or `aqua` in this phase.
+- Direct management of HDL tools (`verilator`, `iverilog`, `ghdl`, `verible-verilog-format`, `vsg`) by `mise` or `aqua` in this phase.

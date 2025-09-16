@@ -3,3 +3,4 @@ edalize
 yowasp-yosys 
 cocotb
 teroshdl
+vsg
