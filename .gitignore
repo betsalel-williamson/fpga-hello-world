@@ -1,1 +1,14 @@
 *.env
+
+uv.lock
+
+.coverage
+coverage.xml
+pytest-report.xml
+.pytest_cache/
+
+*.egg-info/
+*.pyc
+__pycache__/
+
+build/
