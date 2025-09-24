@@ -10,7 +10,7 @@ Add a `.env` with necessary credentials to use GeminiCLI. The git submodule `gen
 
 ## 1. Docker
 
-Docker is used to build and run the specialized FPGA development environment image, ensuring a consistent and reproducible build process. For macOS users, especially those with Apple Silicon, [Colima](https://github.com/abiosoft/colima) is a recommended lightweight alternative to Docker Desktop.
+Docker is used to build and run the specialized FPGA development environment images, ensuring a consistent and reproducible build process. For macOS users, especially those with Apple Silicon, [Colima](https://github.com/abiosoft/colima) is a recommended lightweight alternative to Docker Desktop.
 
 - **Installation Guide (Docker Desktop):** [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/)
 
@@ -54,53 +54,31 @@ Colima provides a container runtime for macOS (and Linux) with minimal overhead,
 
     Save and exit the editor. Colima will then restart with the updated configuration. Refer to the [Colima documentation](https://github.com/abiosoft/colima#mounts) for more advanced mounting configurations.
 
-## 2. HDL Development Tools (Icarus Verilog, Verilator, GHDL & GTKWave)
+## 2. HDL Development Tools (OSS CAD Suite & vsg)
 
-Icarus Verilog is a Verilog compiler that generates an intermediate format (VVVP) which can be executed by a simulator (vvp). Verilator is a fast, open-source Verilog and SystemVerilog simulator. GHDL is an open-source VHDL compiler and simulator. GTKWave is a waveform viewer used to visualize the output of Verilog/SystemVerilog/VHDL simulations.
+The OSS CAD Suite provides a comprehensive collection of open-source tools for digital logic design, including RTL synthesis, formal hardware verification, place & route, FPGA programming, and simulation tools like Icarus Verilog, Verilator, GHDL, and GTKWave. `vsg` is a dedicated VHDL formatter.
 
-### HDL Tools Mac Installation
+### Installation
 
-Due to compatibility issues with GTKWave on macOS 14 (Sonoma) and later, a community Homebrew tap is recommended for installation.
+To install the OSS CAD Suite, use the provided installation script. This script will download and extract the suite to a standard location, and set up the necessary environment variables.
 
-- **Install Icarus Verilog and GTKWave from a community tap**:
-
-    ```bash
-    brew install icarus-verilog
-    brew tap randomplum/gtkwave
-    brew install --HEAD randomplum/gtkwave/gtkwave
-    ```
-
-- **Install Verilator:**
+- **Install OSS CAD Suite:**
 
     ```bash
-    brew install verilator
+    ./scripts/download_oss_cad_suite_static.sh && ./scripts/install_oss_cad_suite.sh ./scripts/oss_cad_suite_downloads/oss-cad-suite*.tgz
     ```
 
-- **Install GHDL:**
+### Verification
 
-    ```bash
-    brew install ghdl
-    ```
+After installation, verify the tools by running:
 
-### HDL Tools Ubuntu Installation
-
-For Ubuntu users, GHDL with the GCC backend can be installed via apt-get.
-
-- **Install GHDL (GCC Backend):**
-
-    ```bash
-    sudo apt-get update
-    sudo apt-get install -y ghdl-gcc
-    ```
-
-- **Verification:** After installation, verify by running:
-
-    ```bash
-    iverilog -V
-    verilator --version
-    ghdl --version
-    gtkwave --version
-    ```
+```bash
+iverilog -V
+verilator --version
+ghdl --version
+gtkwave --version
+vsg --version
+```
 
 ### Viewing Simulation Output Online
 
